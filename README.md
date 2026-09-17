@@ -1,29 +1,55 @@
-Independent researcher, no employer and no team. I work on verification method: establishing what
-is verifiably true about shipped software from public evidence alone, with a reproducible
-procedure and explicit controls.
+<h1 align="center">Chetas Lua</h1>
 
-## Repos
+<p align="center">
+  <b>Independent AI researcher and reporter.</b><br>
+  I test frontier models first-hand, publish what I can measure, and turn the experiments into open-source tools.
+</p>
 
-- **[scrubwatch](https://github.com/ChetasLua/scrubwatch)** — reads the edit history of public
-  GitHub issue, pull-request and comment bodies and prints the text that was edited out. Comment
-  edit history is public by design on a public repository — GitHub documents that anyone with
-  read access can view it — so the tool automates access to data that was already readable, and
-  is not a disclosure finding. Unauthenticated, and the requests are github.com routes rather
-  than API calls, so a sweep spends none of the api.github.com quota. `--selftest` measures that,
-  alongside what the same request returns for a body with no edit history, for an invalid node
-  id, and with the one load-bearing header removed. Status codes and byte counts.
-- **[negative-controls](https://github.com/ChetasLua/negative-controls)** — a small harness that
-  refuses to report an absence unless a positive control passed in the same run, plus three cases
-  where I read a broken query as a real zero.
+<p align="center">
+  <a href="https://x.com/chetaslua"><img alt="X @chetaslua" src="https://img.shields.io/badge/X-@chetaslua%20·%2034K%2B%20followers-000000?style=for-the-badge&logo=x&logoColor=white"></a>
+  <a href="https://www.youtube.com/@ChetasLua"><img alt="YouTube" src="https://img.shields.io/badge/YouTube-@ChetasLua-ff0000?style=for-the-badge&logo=youtube&logoColor=white"></a>
+  <a href="mailto:chetaslua@gmail.com"><img alt="Email" src="https://img.shields.io/badge/Email-chetaslua@gmail.com-4c8dff?style=for-the-badge&logo=gmail&logoColor=white"></a>
+</p>
 
-## Method
+---
 
-- Settle a question with a first-party experiment and raw numbers, not with someone else's summary.
-- Validate the instrument before trusting the result. A positive control that must return
-  something, a negative control that must return nothing, one variable changed at a time.
-- State the objection that survives. An untested alternative explanation belongs next to the
-  result, not in a footnote.
+### 🚀 Featured: [jevmeter](https://github.com/ChetasLua/jevmeter)
 
-Each repo records what was measured, when, and what would falsify it.
+<a href="https://github.com/ChetasLua/jevmeter"><img src="https://raw.githubusercontent.com/ChetasLua/jevmeter/main/docs/banner.jpg" alt="jevmeter banner" width="100%"></a>
 
-Reachable at chetaslua@gmail.com.
+**Put a live BS meter on any video.** Every sentence is scored by TypeSafe's Jev model, and the result is rendered as a
+ready-to-post 16:9 edit with per-speaker meters, captions, flags, a hyperlapse and a receipts scoreboard.
+
+- Built for a [presidential-debate breakdown on X](https://x.com/chetaslua/status/2100473581251748216): 1,191 sentences scored for **$0.05**.
+- Presets for debates, earnings calls, podcasts and sales pitches, at **99% accuracy on a held-out evaluation set**.
+- Beginner-friendly: `./install.sh`, paste an API key, drag in a video.
+
+---
+
+### 🧰 Open-source work
+
+| Project | What it does | Stack |
+|---|---|---|
+| **[jevmeter](https://github.com/ChetasLua/jevmeter)** | Scores every sentence of a video with Jev and renders an animated, shareable edit | Python · Whisper · Pillow · ffmpeg |
+| **[scrubwatch](https://github.com/ChetasLua/scrubwatch)** | Reads the edit history of public GitHub issue, PR and comment bodies and prints text that was edited out | Python, stdlib only |
+| **[negative-controls](https://github.com/ChetasLua/negative-controls)** | A harness that refuses to report "nothing found" unless a positive control passed in the same run | Python |
+
+---
+
+### 🔬 How I work
+
+- **First-party evidence.** Settle a question with my own experiment and raw numbers, not someone else's summary.
+- **Validate the instrument first.** A positive control that must find something, a negative control that must find nothing, one variable changed at a time.
+- **Held-out evaluation.** Tune on one set and report on another, like the 200-sentence test set behind jevmeter's presets.
+- **Show the surviving objection.** An untested alternative explanation sits next to the result, not in a footnote.
+
+### 📡 What I cover
+
+Frontier model releases and codenames, hands-on comparisons of AI coding and video models, and reproducible
+teardowns of AI products, posted on [X](https://x.com/chetaslua) and [YouTube](https://www.youtube.com/@ChetasLua).
+
+---
+
+<p align="center">
+  Scoops, collaborations or questions: <a href="mailto:chetaslua@gmail.com">chetaslua@gmail.com</a>
+</p>
