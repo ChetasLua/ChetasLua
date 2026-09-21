@@ -1,48 +1,60 @@
 # Claude × Codex
 
-A 60-second arcade game in ChetasLua’s playable Overview. Claude and Codex compete for the same help requests. Chetas, the stone philosopher with a laptop, can jailbreak nearby bots into cooperating and help people directly.
+A small, continuously running showcase in ChetasLua’s playable Overview. Claude and Codex build visual versions of real projects, check their work, and send the finished artifact toward GitHub. Chetas can walk in, jailbreak a stuck bot, and join the build.
 
-## Play
+## What appears
 
-- **A / D** or **← / →**: walk. **Shift**: run.
-- **Space / ↑ / W**: jump.
-- **J**: release a jailbreak pulse. Reach: 235 world pixels; cooldown: 2.8 seconds.
-- Click a request card or choose a person below the stage, then **Send Claude** or **Send Codex**. Each bot walks over and works on that request.
-- **E**: talk to the nearest person and inspect their request.
-- Stand near a person to open the laptop and help automatically.
-- **Escape** or **pause**: pause the round. The game also pauses when the page loses focus or becomes hidden.
-- On a phone, hold the direction, jump, and J buttons. Tap a spot on the stage to move there.
+Six public repositories rotate through a shuffled deck. Every project appears once per deck, and the boundary never repeats the previous project. People, Sudoku boards, controller input sequences, and editing timelines also vary.
 
-A jailbreak clears a bot’s temporary lock and gives it eight seconds of faster, cooperative work. Every completed request earns 100 points; requests with multiple contributors earn 150. Each bot reached by a jailbreak earns 25. The bots solve curated local cases: converting strings before summing, isolating a variable and substituting the answer, and drafting an email with the requested time and tone. The terminal shows the original problem, the working, and checked results. Code and algebra answers are calculated; the email is assembled and checked against its requirements. A failed check earns no points. There is no network model call. The best score stays in browser storage. Sound starts off and uses synthesized audio when enabled.
+| Repository | Visual scene |
+| --- | --- |
+| [sudoku-graph-coloring](https://github.com/ChetasLua/sudoku-graph-coloring) | A colored 9 × 9 puzzle and its constraint graph |
+| [xbox360-svg-controller](https://github.com/ChetasLua/xbox360-svg-controller) | A controller taking shape, with buttons lighting up |
+| [jevmeter](https://github.com/ChetasLua/jevmeter) | A waveform, scored moments, and selected cuts |
+| [scrubwatch](https://github.com/ChetasLua/scrubwatch) | Before/after documents revealing removed and added lines |
+| [negative-controls](https://github.com/ChetasLua/negative-controls) | Known signals and empty samples passing through a test instrument |
+| [little-neighbourhood](https://github.com/ChetasLua/little-neighbourhood) | A miniature isometric world assembling itself |
 
-## How the Overview works
+These are procedural demonstrations of existing projects. The code validates local fixtures before awarding a completed build. The shipping animation does not create commits or call AI services. The source link opens the actual featured repository. Public repository descriptions and links were checked on September 21, 2026.
 
-The GitHub profile README displays an animated game preview. Clicking it navigates in the same tab to GitHub Pages, where the surrounding Overview layout and profile content match and the game starts inside the README panel. GitHub sanitizes executable scripts out of Markdown, so the README itself cannot host interactive JavaScript. This uses the same presentation approach as [Jayant Chopra’s reference](https://github.com/JayantChopra/JayantChopra), without a separate game landing screen, pop-up, or full-screen takeover.
+## Interaction
 
-The site is an independently hosted profile view. Profile links, repository links, and navigation point to real GitHub pages. It does not imitate sign-in or collect credentials. Profile counts are a snapshot, not live API counters.
+- The scene starts automatically and keeps showing new projects.
+- Click the project to try it and contribute to the build.
+- Click Claude or Codex to let that bot lead. Click a person to hear their request or reaction.
+- **Shuffle** shows another project immediately.
+- **Join in** takes control of Chetas. **A/D** or arrows walk, **Shift** runs, **Space** jumps, and **J** jailbreaks nearby bots. **E** talks to a person.
+- **Watch** gives movement back to the scene. **Escape** or **Pause** pauses everything.
+- Phones have movement, jump, and jailbreak buttons. Sound starts off.
 
-## Art
+People hold a controller or phone when it suits the project, point, watch the work, talk, nod, give a thumbs-up, and clap. Their shaped heads come from Chetas’s Head Cases drawing system. The updated bodies add jointed limbs, shirt and coat layers, cuffs, seams, buttons, hands, shoelaces, and face shading. Claude and Codex remain code-drawn mascots.
 
-Chetas has four image-generated sheets: **8 idle frames, 8 walk frames, 8 run frames, and 16 action frames**. The actions include jump, jailbreak cast, laptop typing, and celebration. Movement advances frames by distance traveled; the renderer anchors frames consistently and mirrors them for left-facing movement. The generated sheets deliberately use a magenta chroma key, removed on load. Details and generation prompts: [SPRITES.md](assets/SPRITES.md).
+## Loading and rendering
 
-Clawd and Codex are drawn entirely in JavaScript. Clawd uses the orange block body, square eyes, and little legs from the Claude mascot. Codex uses the blue scalloped head, dark terminal face, and small blue body from the Codex desktop pet. No mascot raster sheet is shipped. People reuse the shaped heads from Chetas’s **Head Cases** project: skull projection, noses, jaws, eyes, brows, hair, glasses, and ink strokes all come from its Canvas drawing system. Nine people have distinct features, outfits, and skin tones. Their eyes follow the conversation; they blink, talk, nod, and change expression as a job progresses. Articulated bodies point, scratch their heads, give a thumbs-up, clap, walk in, and leave. The selected person also appears in a larger live portrait. The simple stage stays code-drawn. This project is a personal fan-made game and is not affiliated with Anthropic or OpenAI.
+The original four ImageGen sheets are retained as source artwork. Forty animation frames are pre-trimmed, keyed, resized, and packed into one transparent WebP atlas: **449,000 bytes**, down from **7,570,816 bytes**. The browser no longer scans source pixels or waits for sprite preparation. Code-drawn characters and the project appear before the avatar image finishes decoding.
 
-## Run and verify
+A single browser bundle reduces script requests. The scene supports high-density displays, uses a separate phone composition, limits mobile painting to 30 fps, updates DOM status at 10 Hz, and suspends work when the scene or tab is out of view. No fonts, frameworks, analytics, model APIs, or GitHub API calls load at runtime.
+
+The native GitHub README shows a compact animated preview. Clicking it opens the matching playable Overview in the same tab. GitHub removes executable scripts from README Markdown, so JavaScript gameplay runs on GitHub Pages.
+
+## Run and build
+
+Open `index.html` directly, or serve this directory:
 
 ```sh
 python3 -m http.server 8767 --bind 127.0.0.1
-# Open http://127.0.0.1:8767/
 node --test game/engine.test.mjs
 python3 scripts/build_offline.py
 ```
 
-`claude-vs-codex.html` is the generated standalone version, including all four sheets and the avatar. It opens directly without a server. The build also produces `game/offline.js`, which lets the local `index.html` open directly. Both generated files are kept out of Git; rebuild them after editing. Hosted pages use the small source modules. To edit the game, change the modules rather than generated output.
+The build refreshes `game/app.js` and the self-contained `claude-vs-codex.html`. Edit the source modules, then rebuild. The standalone HTML is ignored by Git. To rebuild the atlas from the original sheets, install Pillow and run `python3 scripts/build_sprites.py` before bundling.
 
-- `game/engine.mjs`: deterministic simulation, movement, requests, bot rivalry, jailbreaks, scoring, pause, and round end.
-- `game/jobs.mjs`: the cast, example requests, solution calculations, and checks.
-- `game/portraits.mjs`: the adapted Head Cases geometry and expressions.
-- `game/renderer.mjs`: Canvas rendering, sprite frame extraction, articulated bodies, gestures, live portraits, and procedural mascots.
-- `game/main.mjs`: keyboard/pointer controls, accessible status, UI, storage, and browser lifecycle.
-- `game/audio.mjs`: opt-in procedural sound effects.
+- `game/projects.mjs`: repository catalog, randomized fixtures, and checks.
+- `game/engine.mjs`: project rotation, cooperation, controls, scoring, and lifecycle.
+- `game/project-art.mjs`: the six visual project demonstrations.
+- `game/portraits.mjs` and `game/people.mjs`: heads and character designs.
+- `game/renderer.mjs`: bodies, mascots, sprite animation, and responsive compositions.
+- `game/main.mjs`: controls, accessibility, visibility, and UI.
+- `game/atlas.mjs`: generated frame coordinates.
 
-No frameworks, package installation, external game services, analytics, or third-party script dependencies are required.
+Art provenance and original generation prompts are in [SPRITES.md](assets/SPRITES.md). This is a personal fan-made game, independently hosted and unaffiliated with Anthropic or OpenAI.

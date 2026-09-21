@@ -15,7 +15,7 @@ function RNG(seed){let s=seed>>>0;
   return r}
 
 
-let PAPER='#e5cab2', INK='#241e20', ACCENT='#c86e65', SC=1, BOIL=0;
+let PAPER='#e5cab2', INK='#241e20', ACCENT='#c86e65', FACE=null, SC=1, BOIL=0;
 /* a pen stroke = filled ribbon: wobbles along its length, swells in the middle, tapers at the ends */
 function ink(pts,w,seed,closed,amp){
   const n=pts.length;if(n<2)return;w*=SC;seed=(seed|0)+BOIL*31;
@@ -200,7 +200,7 @@ F.eye=(h,s)=>{const d=h.d,e=h.ex,az0=s*d.eyeX,el0=d.eyeY,ew=d.eyeW,eh=d.eyeH*(1+
   const pupil=r=>loopOn(h,u=>at(pu+cos(u*TAU)*r,pv+sin(u*TAU)*r*1.05),10,.014);
   if(d.eyeStyle==='dot'){fillPoly(pupil(pr*(1.15+.3*e.wide)),INK);return}
   const lid=x=>lerp(lo(x),up(x),open),N=9,top=curve(h,u=>at((u*2-1)*ew,lid(u*2-1)),N,.012),bot=curve(h,u=>at((1-u*2)*ew,lo(1-u*2)),N,.012),all=top.concat(bot.slice(1,-1));
-  fillPoly(all,PAPER);ctx.save();path(all,1);ctx.clip();
+  fillPoly(all,'#eee5d9');ctx.save();path(all,1);ctx.clip();
   if(e.dizzy>.5){const sp=curve(h,u=>{const a=u*TAU*2.6+T*7*s,r=u*ew*.95;return at(cos(a)*r,sin(a)*r*.9)},26,.014);ink(sp,1.2,sd+3,false,0)}
   else if(d.iris){ink(pupil(pr*1.75),.9,sd+2,true,0);fillPoly(pupil(pr*.62),INK)}else fillPoly(pupil(pr),INK);
   ctx.restore();ink(top,d.lidHeavy?2.5:1.6,sd);ink(bot,1,sd+1);
@@ -293,7 +293,7 @@ function drawDeco(h,pass){const k=h.deco;if(!k)return;const d=h.d,S=h.S;
 function drawHead(h){const d=h.d;SC=h.S/62;BOIL=floor(T*6+d.phase)%3;ctx.fillStyle=INK;
   h.cx=h.bx;h.cy=h.by-h.hop;projectHead(h);
   drawDeco(h,0);F.topper(h,0);F.nose(h,0);F.ear(h,-1,0);F.ear(h,1,0);
-  fillPoly(h.out,PAPER);
+  fillPoly(h.out,FACE||PAPER);
   F.extras(h);F.beard(h);F.mouth(h);F.stache(h);F.brow(h,-1);F.brow(h,1);F.eye(h,-1);F.eye(h,1);
   const curly=d.hair==='curly';if(!curly)F.hair(h);
   ink(h.out,1.9,h.seed+20,true);if(curly)F.hair(h);
@@ -307,8 +307,8 @@ const mouthPos=h=>xf(h,surf(h.d,0,h.d.mouthY,.05));
   function get(client) {
     if (!cast.has(client.seed)) {
       const h = makeHead(client.seed, 0, 0, 24, 0, 0);
-      Object.assign(h.d, { rx:.86, ry:1.14, jaw:.24, eyeStyle:'almond', eyeW:.15, eyeH:.095,
-        eyeY:.13, mouthY:-.66, noseStyle:'L', noseLen:.26, browStyle:'line',
+      Object.assign(h.d, { rx:clamp(h.d.rx,.82,.96), ry:clamp(h.d.ry,1.08,1.22), jaw:clamp(h.d.jaw,.17,.34), eyeStyle:'almond', eyeW:.15, eyeH:.09, iris:true,
+        eyeY:.13, mouthY:-.66, noseStyle:'L', noseLen:clamp(h.d.noseLen,.23,.35), browStyle:'line',
         hair:client.hair || 'black', glasses:client.glasses || 'none', beard:client.beard || 'none',
         stache:'none', collar:'none', freckles:!!client.freckles, wrinkles:!!client.wrinkles,
         bags:false, folds:false, earring:!!client.earring, bun:!!client.bun });
@@ -320,6 +320,9 @@ const mouthPos=h=>xf(h,surf(h.d,0,h.d.mouthY,.05));
   function draw(client, x, y, size, pose, time, dt) {
     const h=get(client); T=time; PAPER=client.skin || '#e5cab2'; INK='#27212a'; ACCENT='#b76664';
     h.bx=x; h.by=y; h.S=size;
+    const rgb=PAPER.slice(1).match(/../g).map(n=>parseInt(n,16));
+    const tone=f=>'#'+rgb.map(n=>Math.round(clamp(n*f,0,255)).toString(16).padStart(2,'0')).join('');
+    FACE=ctx.createRadialGradient(x-size*.4,y-size*.6,size*.1,x,y,size*1.5);FACE.addColorStop(0,tone(1.15));FACE.addColorStop(.55,PAPER);FACE.addColorStop(1,tone(.73));
     const rate=1-Math.exp(-Math.min(.05,dt)*11);
     const targetYaw=clamp(pose.look || 0,-1,1)*.72;
     h.yaw+=(targetYaw-h.yaw)*rate;

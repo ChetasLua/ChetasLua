@@ -5,10 +5,9 @@ AI research, open-source experiments, and things made out of curiosity.
 
 [X / @chetaslua](https://x.com/chetaslua) · [YouTube](https://www.youtube.com/@ChetasLua) · [Get in touch](mailto:chetaslua@gmail.com)
 
-<a href="https://chetaslua.github.io/ChetasLua/?play=1#game"><img src="assets/game-preview.gif?v=3" alt="Claude × Codex — choose a person, watch the bots solve their problem, and jailbreak them into teamwork. Enter the game." width="100%"></a>
+<a href="https://chetaslua.github.io/ChetasLua/?play=1#game"><img src="assets/game-preview.webp?v=4" alt="Claude × Codex — building real open-source projects with Chetas. Click to join in." width="100%"></a>
 
-Claude and Codex compete to help. You’re the one with the laptop.<br>
-Choose a person. Watch the fix. Break their loop. **60 seconds.**
+A few things we built. A couple of competitive bots. **Jump in.**
 
 ### Things I’m building
 

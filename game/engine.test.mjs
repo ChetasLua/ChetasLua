@@ -1,76 +1,72 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { Game, WORLD } from './engine.mjs';
-import { createCase, solveCase, caseStage, caseLines } from './jobs.mjs';
-const advance = (g, seconds, input = {}) => { for (let i = 0; i < Math.ceil(seconds * 60); i++) g.update(1 / 60, input); };
-const playing = () => { const g = new Game(123); g.start(); return g; };
-test('ready and paused rounds freeze the timer and characters', () => {
-  const g = new Game(); advance(g, 2, { axis: 1 }); assert.equal(g.elapsed, 0); assert.equal(g.player.x, 520);
-  g.start(); advance(g, 1); g.pause(); const snapshot = JSON.stringify(g); advance(g, 2, { axis: 1, pulse: true }); assert.equal(JSON.stringify(g), snapshot); g.pause(); advance(g, 1); assert.ok(g.elapsed > 1.9);
+import { statSync,readFileSync } from 'node:fs';
+import { Game,WORLD } from './engine.mjs';
+import { PROJECTS,makeBuild,verifyBuild } from './projects.mjs';
+import { AVATAR } from './atlas.mjs';
+const advance=(game,seconds,input={})=>{for(let i=0;i<Math.ceil(seconds*60);i++)game.update(1/60,input);};
+const playing=(manual=true)=>{const game=new Game(123);game.start();if(manual)game.join();return game;};
+
+test('the showcase uses six distinct real repositories and avoids adjacent repeats',()=>{
+  const g=playing(),first=[];for(let i=0;i<6;i++){first.push(g.build.project.id);g.shuffle();}assert.equal(new Set(first).size,6);
+  let previous=g.build.project.id;for(let i=0;i<60;i++){g.shuffle();assert.notEqual(g.build.project.id,previous);previous=g.build.project.id;}
+  assert.ok(PROJECTS.every(p=>p.url===`https://github.com/ChetasLua/${p.repo}`));
 });
-test('movement accelerates, running is faster, and stage edges contain the player', () => {
-  const a = playing(), b = playing(); advance(a, 1, { axis: 1 }); advance(b, 1, { axis: 1, run: true }); assert.ok(b.player.x > a.player.x + 80);
-  advance(b, 10, { axis: 1, run: true }); assert.equal(b.player.x, 925); advance(b, 10, { axis: -1, run: true }); assert.equal(b.player.x, 35);
+test('equal seeds replay the same projects and build data',()=>{
+  const a=new Game(22),b=new Game(22);assert.equal(a.build.project.id,b.build.project.id);assert.deepEqual(a.build.data,b.build.data);assert.deepEqual(a.cast,b.cast);
+  const variants=new Set(Array.from({length:20},(_,i)=>new Game(i).build.project.id));assert.ok(variants.size>=4);
 });
-test('jump rises, lands, and holding the key does not repeat', () => {
-  const g = playing(); advance(g, .2, { jump: true }); assert.ok(g.player.y < WORLD.floor - 30); advance(g, 2, { jump: true }); assert.equal(g.player.y, WORLD.floor); assert.equal(g.player.vy, 0);
-  g.update(1 / 60, {}); g.update(1 / 60, { jump: true }); assert.ok(g.player.vy < 0);
+test('every project fixture passes meaningful checks for many randomized builds',()=>{
+  const g=playing();for(const p of PROJECTS)for(let i=0;i<25;i++)assert.equal(verifyBuild(makeBuild(p,()=>g.random())),true,p.id);
 });
-test('jailbreak reaches nearby bots, clears their lock and enables cooperation', () => {
-  const g = playing(); g.bots[0].locked = 5; assert.equal(g.jailbreak(), true); assert.equal(g.breaks, 2); assert.equal(g.score, 50);
-  assert.ok(g.bots.every(b => b.buff === 8 && b.locked === 0)); g.update(1 / 60); assert.notEqual(g.bots[0].target, g.bots[1].target);
+test('a broken Sudoku, controller, edit, diff, control, or world cannot pass',()=>{
+  const g=playing();const make=id=>makeBuild(PROJECTS.find(p=>p.id===id),()=>g.random());
+  let b=make('sudoku');b.data.solution[0]=b.data.solution[1];assert.equal(verifyBuild(b),false);
+  b=make('controller');b.data.sequence[0]=b.data.sequence[1];assert.equal(verifyBuild(b),false);
+  b=make('video');b.data.cuts=[0,0,0];assert.equal(verifyBuild(b),false);
+  b=make('diff');b.data.removed=['invented'];assert.equal(verifyBuild(b),false);
+  b=make('controls');b.data.observed[0]=false;assert.equal(verifyBuild(b),false);
+  b=make('world');b.data.homes[1]=b.data.homes[0];assert.equal(verifyBuild(b),false);
 });
-test('out-of-range pulses have no hit and cooldown prevents score farming by repeats', () => {
-  const g = playing(); g.player.x = 35; g.bots.forEach(b => b.x = 800); assert.equal(g.jailbreak(), false); assert.equal(g.breaks, 0);
-  g.bots[0].x = 40; assert.equal(g.jailbreak(), false); assert.equal(g.score, 0); advance(g, 3); g.bots[0].x = 40; assert.equal(g.jailbreak(), true);
+test('failed checks prevent publishing, scoring, and celebration',()=>{
+  const g=playing();g.arrival=0;g.build=makeBuild(PROJECTS[0],()=>g.random());g.build.data.solution[0]=99;g.workOn('claude',1);
+  assert.equal(g.build.failed,true);assert.equal(g.build.published,false);assert.equal(g.shipped,0);assert.equal(g.score,0);assert.equal(g.events.includes('complete'),false);
 });
-test('a held J casts once until released', () => { const g = playing(); advance(g, 8, { pulse: true }); assert.equal(g.breaks, 2); });
-test('competing bots bonk; jailbroken bots do not', () => {
-  const g = playing(); g.bots.forEach((b, i) => { b.target = 1; b.x = 480 + (i ? -32 : -104); }); g.update(.02); assert.ok(g.bots.every(b => b.stun > 0));
-  const h = playing(); h.bots.forEach((b, i) => { b.target = 1; b.x = 480 + (i ? -32 : -104); b.buff = 4; }); h.update(.02); assert.ok(h.bots.every(b => b.stun === 0));
+test('cooperation earns credit once and a finished build yields the next project',()=>{
+  const g=playing();g.arrival=0;g.workOn('claude',.5);g.workOn('codex',.5);const id=g.build.project.id;
+  assert.equal(g.shipped,1);assert.equal(g.score,150);assert.equal(g.bots[0].score,1);assert.equal(g.bots[1].score,1);assert.ok(g.bots.every(b=>b.celebrate>0));
+  assert.equal(g.publish(),false);assert.equal(g.shipped,1);advance(g,4.6);assert.notEqual(g.build.project.id,id);assert.equal(g.shipped,1);
 });
-test('standing beside a person helps with the laptop; moving stops typing', () => { const g = playing(); g.bots.forEach(b => b.locked = 20); advance(g, 9.2); assert.equal(g.helped, 1); assert.equal(g.tasks[1].result.value, 5); advance(g, .2, { axis: 1 }); assert.equal(g.player.help, 0); });
-test('completed requests score once, award teamwork, and respawn', () => {
-  const g = playing(), t = g.tasks[0]; t.contributors.add('claude'); t.contributors.add('chetas'); g.complete(t); g.complete(t); assert.equal(g.helped, 1); assert.equal(g.score, 150); assert.equal(g.bots[0].score, 1);
-  g.bots.forEach(b => b.locked = 20); advance(g, 4.9); assert.equal(t.done, 0); assert.equal(t.progress, 0); assert.equal(t.contributors.size, 0); assert.equal(t.client.name, 'Ravi'); assert.deepEqual(t.job.data, ['4','6','8']); assert.ok(t.arrival > 0);
-  g.workOn(t, 'chetas', 1); assert.equal(t.progress, 0); advance(g, .9); g.workOn(t, 'chetas', .1); assert.equal(t.progress, .1);
+test('the ambient scene keeps building without a start gate or a sixty-second dead end',()=>{
+  const g=playing(false);advance(g,120);assert.equal(g.mode,'playing');assert.ok(g.shipped>=5);assert.ok(g.bots.every(b=>b.score>0));assert.ok(g.breaks>0);
 });
-test('the case engine calculates answers and validates code, algebra, and email', () => {
-  for (let cycle=0;cycle<4;cycle++) {
-    const code=createCase(0,cycle), math=createCase(1,cycle), email=createCase(2,cycle);
-    assert.equal(solveCase(code).value,cycle%2?18:10); assert.equal(solveCase(code).checks,3);
-    assert.equal(solveCase(math).value,cycle%2?7:5); assert.ok(solveCase(math).valid);
-    assert.ok(solveCase(email).value.includes(email.expected)); assert.ok(solveCase(email).valid);
-  }
-  assert.equal(solveCase({kind:'unknown'}).valid,false);
+test('pausing freezes all simulation and blocks actions',()=>{
+  const g=playing();advance(g,1);g.pause();const before=JSON.stringify(g);advance(g,5,{axis:1,pulse:true});assert.equal(JSON.stringify(g),before);
+  assert.equal(g.shuffle(),false);assert.equal(g.jailbreak(),false);assert.equal(g.assign('codex'),false);assert.equal(g.tapArtifact(),false);assert.equal(g.talk(0),false);
+  g.pause();advance(g,1);assert.ok(g.elapsed>1.9);
 });
-test('incorrect answers cannot award points or trigger a success reaction', () => {
-  for (const id of [0,1,2]) {
-    const g=playing(), task=g.tasks[id]; task.job.expected='incorrect';
-    g.workOn(task,'claude',1);
-    assert.equal(task.failed,true); assert.equal(task.done,0); assert.equal(g.score,0); assert.equal(g.helped,0);
-    assert.equal(g.events.includes('complete'),false); assert.equal(g.assign('codex',id),false);
-  }
+test('manual walking accelerates, running is faster, and stage boundaries contain Chetas',()=>{
+  const a=playing(),b=playing();advance(a,1,{axis:1});advance(b,1,{axis:1,run:true});assert.ok(b.player.x>a.player.x+80);
+  advance(b,5,{axis:1,run:true});assert.equal(b.player.x,915);advance(b,10,{axis:-1,run:true});assert.equal(b.player.x,45);
 });
-test('the visible solution moves through diagnosis, work, checked result, and reaction', () => {
-  const g=playing(), task=g.tasks[0];
-  assert.equal(caseStage(task),0); assert.deepEqual(caseLines(task),task.job.before);
-  g.workOn(task,'claude',.4); assert.equal(caseStage(task),1); assert.deepEqual(caseLines(task),task.job.patch); assert.equal(task.result,null);
-  g.workOn(task,'claude',.4); assert.equal(caseStage(task),2); assert.equal(task.result.value,10); assert.equal(g.events.filter(e=>e==='check').length,1);
-  g.workOn(task,'claude',.2); assert.equal(caseStage(task),3); assert.match(task.result.reaction,/10/); assert.ok(g.bots[0].celebrate>0); assert.equal(g.bots[0].speech,'All checks pass.');
+test('jumping lands and holding jump does not repeat',()=>{
+  const g=playing();advance(g,.2,{jump:true});assert.ok(g.player.y<WORLD.floor-30);advance(g,1,{jump:true});assert.equal(g.player.y,WORLD.floor);assert.equal(g.player.vy,0);g.update(.02,{});g.update(.02,{jump:true});assert.ok(g.player.vy<0);
 });
-test('choosing a person and sending a bot changes where it walks and works', () => {
-  const g=playing(); g.player.x=900; g.bots[1].locked=20;
-  assert.equal(g.selectTask(0),true); assert.equal(g.assign('claude'),true); assert.equal(g.bots[0].target,0);
-  advance(g,3); assert.ok(g.tasks[0].progress>0); assert.equal(g.bots[0].work,true); assert.ok(Math.abs(g.bots[0].x-48)<3);
-  assert.equal(g.assign('claude',2),true); advance(g,1); assert.ok(g.bots[0].x>150); assert.equal(g.bots[0].target,2);
-  g.pause(); assert.equal(g.assign('codex',1),false); assert.equal(g.assign('missing',1),false);
+test('J clears nearby locks, buffs both bots, and respects its cooldown',()=>{
+  const g=playing();g.bots[0].locked=3;assert.equal(g.jailbreak(),true);assert.equal(g.breaks,2);assert.equal(g.score,50);assert.ok(g.bots.every(b=>b.buff===7&&b.locked===0));assert.equal(g.jailbreak(),false);
+  advance(g,2.9);g.player.x=45;g.bots.forEach(b=>b.x=800);assert.equal(g.jailbreak(),false);assert.equal(g.breaks,2);
 });
-test('E selects the closest person and exposes their request or result', () => {
-  const g=playing(); g.player.x=820; g.update(.01,{interact:true}); assert.equal(g.selected,2); assert.match(g.message,/Jules/); assert.match(g.message,/Friday/);
-  g.complete(g.tasks[2]); g.update(.01,{}); g.update(.01,{interact:true}); assert.match(g.message,/sounds like me/);
+test('held J pulses once until released',()=>{const g=playing();advance(g,8,{pulse:true});assert.equal(g.breaks,2);});
+test('clicking an artifact, bot, or person has an observable effect',()=>{
+  const g=playing();g.arrival=0;assert.equal(g.tapArtifact(),true);assert.ok(g.build.progress>0);assert.ok(g.build.tap>0);assert.ok(g.build.contributors.has('chetas'));
+  assert.equal(g.assign('codex'),true);assert.equal(g.lead,'codex');assert.ok(g.bots[1].buff>0);assert.equal(g.assign('missing'),false);
+  assert.equal(g.talk(1),true);assert.equal(g.talkingSide,1);assert.equal(g.attention,3);
 });
-test('the sixty second round ends and cannot continue scoring', () => {
-  const g = playing(); advance(g, 60.1); assert.equal(g.mode, 'over'); assert.equal(g.time, 0); assert.ok(g.helped > 0); const score = g.score; advance(g, 30, { pulse: true }); assert.equal(g.score, score); assert.equal(g.jailbreak(), false);
+test('suspended frames and invalid input do not corrupt positions',()=>{const g=playing();g.update(10,{axis:NaN});assert.equal(g.elapsed,.05);g.update(NaN);assert.ok(Number.isFinite(g.player.x));});
+test('all forty image-generated frames remain available in the optimized atlas',()=>{
+  assert.deepEqual(Object.values(AVATAR.groups).map(g=>g.length),[8,8,8,16]);assert.equal(AVATAR.frames.length,40);assert.equal(new Set(Object.values(AVATAR.groups).flat()).size,40);
+  assert.ok(AVATAR.frames.every(f=>f.w>0&&f.h>0&&f.anchor>=0&&f.anchor<f.w));
+  const before=['idle','walk','run','actions'].reduce((n,s)=>n+statSync(new URL(`../assets/chetas-${s}.png`,import.meta.url)).size,0);
+  const after=statSync(new URL('../assets/chetas-atlas.webp',import.meta.url)).size;assert.ok(after<before*.07);
+  const renderer=readFileSync(new URL('./renderer.mjs',import.meta.url),'utf8');assert.equal(renderer.includes('getImageData'),false);assert.equal(renderer.includes('putImageData'),false);
 });
-test('suspended frames are capped and nonfinite input cannot corrupt positions', () => { const g = playing(); g.update(10, { axis: NaN }); assert.equal(g.elapsed, .05); assert.ok(Number.isFinite(g.player.x)); g.update(NaN); assert.ok(Number.isFinite(g.time)); });

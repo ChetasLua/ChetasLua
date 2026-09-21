@@ -7,7 +7,8 @@
   <meta name="description" content="Chetas Lua — independent AI researcher, tools, experiments, and a tiny Claude × Codex game in the Overview.">
   <title>ChetasLua · Overview</title>
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="style.css">
+  <link rel="preload" as="image" href="assets/chetas-atlas.webp" fetchpriority="high">
+  <link rel="stylesheet" href="style.css?v=4">
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
@@ -24,7 +25,7 @@
       <div class="identity"><h1>Chetas Lua</h1><p class="username">ChetasLua</p></div>
       <p class="bio">Independent AI researcher &amp; reporter · I test frontier models and open-source the tools · 34K+ on X</p>
       <a class="follow" href="https://github.com/ChetasLua">View GitHub profile</a>
-      <p class="followers"><a href="https://github.com/ChetasLua?tab=followers"><b>11</b> followers</a> · <a href="https://github.com/ChetasLua?tab=following"><b>1</b> following</a></p>
+      <p class="followers"><a href="https://github.com/ChetasLua?tab=followers"><b>12</b> followers</a> · <a href="https://github.com/ChetasLua?tab=following"><b>1</b> following</a></p>
       <div class="sidebar-links"><a href="https://x.com/chetaslua"><span aria-hidden="true">𝕏</span> @chetaslua</a><a href="https://www.youtube.com/@ChetasLua"><span aria-hidden="true">▷</span> youtube.com/@ChetasLua</a><a href="mailto:chetaslua@gmail.com"><span aria-hidden="true">✉</span> chetaslua@gmail.com</a></div>
     </aside>
     <main id="main">
@@ -34,29 +35,17 @@
           <h2>hey, i'm chetas</h2>
           <p>I test frontier models, build tools, and publish the receipts.<br>AI research, open-source experiments, and things made out of curiosity.</p>
           <p class="intro-links"><a href="https://x.com/chetaslua">X / @chetaslua</a><span>·</span><a href="https://www.youtube.com/@ChetasLua">YouTube</a><span>·</span><a href="mailto:chetaslua@gmail.com">Get in touch</a></p>
-          <section class="arcade" id="game" aria-label="Claude versus Codex game">
-            <div class="game-titlebar"><span><span class="muted">chetaslua /</span> Claude × Codex</span><div><button id="sound" aria-pressed="false">[ sound off ]</button><button id="pause" disabled>[ pause ]</button><a href="https://github.com/ChetasLua" aria-label="Back to GitHub profile">[ profile ↗ ]</a></div></div>
-            <div class="hud" aria-label="Game score"><span><small>SCORE</small><b id="score">0000</b></span><span><small>HELPED</small><b id="helped">0</b></span><span><small>TIME</small><b id="time">60</b></span><span class="pulse-stat"><small>JAILBREAK <kbd>J</kbd></small><b id="charge">READY</b></span></div>
+          <section class="arcade" id="game" aria-label="Claude and Codex build with Chetas">
+            <div class="studio-toolbar"><b><span>Claude</span> × <span>Codex</span></b><span id="shipped">0 built</span><div><button id="sound" aria-label="Enable sound" aria-pressed="false">Sound</button><button id="pause" aria-label="Pause the scene">Pause</button><button id="join" aria-pressed="false" title="Move with arrows or A/D, Shift to run, Space to jump, J to jailbreak">Join in</button></div></div>
             <div class="stage">
-              <canvas id="canvas" tabindex="0" role="application" aria-label="Claude versus Codex. Move with A and D or arrow keys, hold Shift to run, Space to jump, J to jailbreak nearby bots. Stand beside a person to help. E talks to a person. Click requests to inspect them and send a bot. Escape pauses.">Play Claude versus Codex with a keyboard or the touch controls below.</canvas>
-              <div id="intro" class="intro-controls"><button id="start" class="start-button" disabled>[ loading sprites… ]</button></div>
-              <div id="overlay" class="game-overlay" hidden><div><p class="eyebrow" id="overlay-kicker">TAKE A BREATHER</p><h3 id="overlay-title">Paused</h3><p id="overlay-detail">The requests can wait.</p><button id="resume" class="start-button">[ resume ]</button></div></div>
+              <canvas id="canvas" width="960" height="560" tabindex="0" role="application" aria-label="Watch Claude and Codex build open-source projects. Click a bot to let it lead, a person to talk, or the project to try it. Join in: arrow keys or A/D move, Shift runs, Space jumps, J jailbreaks. Escape pauses.">An animated showcase of ChetasLua’s open-source projects. Use the source link below to explore the featured repository.</canvas>
+              <div id="overlay" class="game-overlay" hidden><div><h3>Paused</h3><button id="resume" class="start-button">Resume</button></div></div>
             </div>
-            <div class="controls-hint"><span><kbd>←</kbd><kbd>→</kbd> move <span class="desktop-extra">· <kbd>shift</kbd> run</span> · <kbd>space</kbd> jump · <kbd>J</kbd> jailbreak <span class="desktop-extra">· <kbd>E</kbd> talk</span></span><span id="best">BEST 0000</span></div>
-            <div class="touch-controls" aria-label="Touch game controls"><div><button data-hold="left" aria-label="Move left">←</button><button data-hold="right" aria-label="Move right">→</button></div><div><button data-hold="jump" aria-label="Jump">↑</button><button data-hold="pulse" class="touch-j" aria-label="Jailbreak nearby bots">J</button></div></div>
-            <div id="workbench" class="workbench" hidden aria-label="Inspect help requests">
-              <div class="request-tabs" role="group" aria-label="Choose a person">
-                <button data-case="0" aria-pressed="false">1 · Sam / code</button><button data-case="1" aria-pressed="true">2 · Nia / math</button><button data-case="2" aria-pressed="false">3 · Jules / email</button>
-              </div>
-              <div class="case-detail">
-                <div class="person-brief"><canvas id="person-face" width="192" height="192" aria-hidden="true"></canvas><div><div class="case-heading"><b id="case-title">Nia needs a hand</b><span id="case-state">WAITING</span></div><p id="case-request"></p></div></div>
-                <pre><code id="case-output"></code></pre>
-                <div class="case-bottom"><span id="case-caption"></span><div><button data-assign="claude">Send Claude</button><button data-assign="codex">Send Codex</button></div></div>
-              </div>
-            </div>
+            <div class="project-bar"><a id="project-link" href="https://github.com/ChetasLua/sudoku-graph-coloring" title="Open the featured repository"><span id="project-name">sudoku-graph-coloring</span> ↗</a><div><button id="shuffle" aria-label="Show another project">Shuffle</button><button id="pulse" title="Jailbreak nearby bots" aria-label="Jailbreak nearby bots">J <span id="charge"></span></button></div></div>
+            <div class="touch-controls" aria-label="Touch game controls"><div><button data-hold="left" aria-label="Move left">←</button><button data-hold="right" aria-label="Move right">→</button></div><div><button data-hold="jump" aria-label="Jump">↑</button><button data-hold="pulse" class="touch-j" aria-label="Touch jailbreak">J</button></div></div>
             <p id="live" class="sr-only" role="status" aria-live="polite"></p>
           </section>
-          <p class="game-caption">Claude and Codex compete to help. You’re the one with the laptop.<br>Choose a person. Watch the fix. Break their loop. <span class="muted">60 seconds.</span></p>
+          <p class="game-caption">A few things we built. A couple of competitive bots. Jump in.</p>
           <h3 class="section-title">Things I’m building</h3>
           <ul class="project-list"><li><a href="https://github.com/ChetasLua/jevmeter"><b>jevmeter</b></a> — video transcripts turned into scored, animated edits.</li><li><a href="https://github.com/ChetasLua/scrubwatch"><b>scrubwatch</b></a> — the text that changed in public GitHub histories.</li><li><a href="https://github.com/ChetasLua/negative-controls"><b>negative-controls</b></a> — evidence checks that test the instrument first.</li></ul>
           <h3 class="section-title">A few things you can play with</h3>
@@ -73,6 +62,6 @@
     </main>
   </div>
   <footer class="footer">ChetasLua’s playable Overview · <a href="https://github.com/ChetasLua/ChetasLua">Source</a> · <a href="https://github.com/ChetasLua/ChetasLua/blob/main/GAME.md">Game notes</a> · <a href="https://github.com/ChetasLua">Back to GitHub</a></footer>
-  <script src="game/local-entry.js"></script>
+  <script defer src="game/app.js?v=4"></script>
 </body>
 </html>

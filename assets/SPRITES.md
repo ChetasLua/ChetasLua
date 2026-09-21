@@ -36,3 +36,7 @@ The mascot designs were checked against the Claude desktop app’s Clawd install
 ## Human characters
 
 The people and selected-person portrait are code-native, adapted from Chetas’s `head-cases.html` project recovered from Claude Code history. `game/portraits.mjs` preserves its shaped 3D skull, projected facial features, layered hair, and tapered pen strokes. The game adds skin colors, tuned proportions, nine character designs, and expressions driven by requests and checked results. Bodies and gestures are drawn in `game/renderer.mjs`; no generated human sprite sheets are substituted for this drawing style.
+
+## Optimized runtime atlas
+
+`chetas-atlas.webp` preserves all 40 generated poses. `scripts/build_sprites.py` removes the existing magenta key, finds each frame’s bounds and head anchor, resizes for actual display, and packs a transparent WebP with matching `game/atlas.mjs` coordinates. These are mechanical delivery optimizations; the original generated PNG sheets remain unchanged. The browser decodes one 449,000-byte atlas instead of processing 7,570,816 bytes of source sheets.
