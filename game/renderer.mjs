@@ -140,7 +140,7 @@ export class Renderer {
     if (game.mode === 'over') { name = 'actions'; frame = 12 + Math.floor(t * 4) % 4; }
     else if (p.cast > 0) { name = 'actions'; frame = 4 + clamp(Math.floor((.52 - p.cast) * 8), 0, 3); }
     else if (p.y < WORLD.floor) { name = 'actions'; frame = p.vy < -120 ? 1 : 2; }
-    else if (p.land > 0) { name = 'actions'; frame = 3; }
+    else if (p.land > 0) { name = 'actions'; frame = p.land > .06 ? 3 : 0; }
     else if (Math.abs(p.vx) > 12) { name = Math.abs(p.vx) > 220 ? 'run' : 'walk'; frame = Math.floor(p.walk) % 8; }
     else if (p.help > .65) { name = 'actions'; frame = 8 + Math.floor(t * 6) % 4; }
     this.avatar(p, name, frame, this.compact ? 136 : 101); this.text('YOU', p.x, p.y + 25, this.compact ? 20 : 11, '#c4a7ff');
