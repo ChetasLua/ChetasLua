@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en" data-color-mode="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#0d1117">
+  <meta name="description" content="Chetas Lua — independent AI researcher, tools, experiments, and a tiny Claude × Codex game in the Overview.">
+  <title>ChetasLua · Overview</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <header class="global-header">
+    <a href="https://github.com" aria-label="GitHub" class="github-mark"><svg viewBox="0 0 24 24" width="32" height="32" fill="currentColor" aria-hidden="true"><path d="M12 .8a11.2 11.2 0 0 0-3.54 21.83c.56.1.77-.24.77-.54v-2.08c-3.13.68-3.79-1.33-3.79-1.33-.51-1.3-1.24-1.65-1.24-1.65-1.02-.7.08-.69.08-.69 1.13.08 1.73 1.16 1.73 1.16 1 1.72 2.62 1.22 3.26.93.1-.73.4-1.22.71-1.5-2.5-.28-5.13-1.25-5.13-5.54 0-1.22.44-2.22 1.15-3-.12-.29-.5-1.43.11-2.98 0 0 .94-.3 3.08 1.15a10.8 10.8 0 0 1 5.6 0c2.14-1.45 3.07-1.15 3.07-1.15.62 1.55.24 2.69.12 2.97.72.78 1.15 1.79 1.15 3.01 0 4.3-2.64 5.25-5.15 5.53.4.35.76 1.03.76 2.08v3.09c0 .3.2.65.78.54A11.2 11.2 0 0 0 12 .8Z"/></svg></a>
+    <nav aria-label="GitHub links"><a href="https://github.com/features">Platform</a><a href="https://github.com/solutions">Solutions</a><a href="https://github.com/resources">Resources</a><a href="https://github.com/open-source">Open Source</a></nav>
+    <a class="search-link" href="https://github.com/search">Search GitHub <kbd>/</kbd></a>
+    <a class="profile-link" href="https://github.com/ChetasLua">View on GitHub ↗</a>
+  </header>
+  <nav class="profile-tabs" aria-label="Profile navigation"><div class="tabs-inner"><span class="tab-spacer"></span><a class="selected" aria-current="page" href="#main"><svg viewBox="0 0 16 16" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M0 2.5A1.5 1.5 0 0 1 1.5 1H7l1 1 1-1h5.5A1.5 1.5 0 0 1 16 2.5V14h-6l-2 1-2-1H0Zm1.5 0v10H6l1.25.62V3.75L6.5 2.5Zm7.75 1.25v9.37l1.25-.62h4v-10h-5Z"/></svg>Overview</a><a href="https://github.com/ChetasLua?tab=repositories">Repositories <span class="count">8</span></a><a href="https://github.com/ChetasLua?tab=projects">Projects</a><a href="https://github.com/ChetasLua?tab=stars">Stars</a></div></nav>
+  <div class="profile-layout">
+    <aside class="sidebar" aria-label="Chetas Lua profile">
+      <img class="avatar" src="assets/avatar.png" alt="Chetas Lua’s stone philosopher avatar" width="280" height="280">
+      <div class="identity"><h1>Chetas Lua</h1><p class="username">ChetasLua</p></div>
+      <p class="bio">Independent AI researcher &amp; reporter · I test frontier models and open-source the tools · 34K+ on X</p>
+      <a class="follow" href="https://github.com/ChetasLua">View GitHub profile</a>
+      <p class="followers"><a href="https://github.com/ChetasLua?tab=followers"><b>11</b> followers</a> · <a href="https://github.com/ChetasLua?tab=following"><b>1</b> following</a></p>
+      <div class="sidebar-links"><a href="https://x.com/chetaslua"><span aria-hidden="true">𝕏</span> @chetaslua</a><a href="https://www.youtube.com/@ChetasLua"><span aria-hidden="true">▷</span> youtube.com/@ChetasLua</a><a href="mailto:chetaslua@gmail.com"><span aria-hidden="true">✉</span> chetaslua@gmail.com</a></div>
+    </aside>
+    <main id="main">
+      <article class="readme" aria-label="Profile README">
+        <div class="readme-path"><a href="https://github.com/ChetasLua/ChetasLua">ChetasLua</a><span>/</span>README.md</div>
+        <div class="readme-body">
+          <h2>hey, i'm chetas</h2>
+          <p>I test frontier models, build tools, and publish the receipts.<br>AI research, open-source experiments, and things made out of curiosity.</p>
+          <p class="intro-links"><a href="https://x.com/chetaslua">X / @chetaslua</a><span>·</span><a href="https://www.youtube.com/@ChetasLua">YouTube</a><span>·</span><a href="mailto:chetaslua@gmail.com">Get in touch</a></p>
+          <section class="arcade" id="game" aria-label="Claude versus Codex game">
+            <div class="game-titlebar"><span><span class="muted">chetaslua /</span> Claude × Codex</span><div><button id="sound" aria-pressed="false">[ sound off ]</button><button id="pause" disabled>[ pause ]</button><a href="https://github.com/ChetasLua" aria-label="Back to GitHub profile">[ profile ↗ ]</a></div></div>
+            <div class="hud" aria-label="Game score"><span><small>SCORE</small><b id="score">0000</b></span><span><small>HELPED</small><b id="helped">0</b></span><span><small>TIME</small><b id="time">60</b></span><span class="pulse-stat"><small>JAILBREAK <kbd>J</kbd></small><b id="charge">READY</b></span></div>
+            <div class="stage">
+              <canvas id="canvas" tabindex="0" role="application" aria-label="Claude versus Codex. Move with A and D or arrow keys, hold Shift to run, Space to jump, J to jailbreak nearby bots. Stand beside a person to help. Escape pauses.">Play Claude versus Codex with a keyboard or the touch controls below.</canvas>
+              <div id="intro" class="intro-controls"><button id="start" class="start-button" disabled>[ loading sprites… ]</button></div>
+              <div id="overlay" class="game-overlay" hidden><div><p class="eyebrow" id="overlay-kicker">TAKE A BREATHER</p><h3 id="overlay-title">Paused</h3><p id="overlay-detail">The requests can wait.</p><button id="resume" class="start-button">[ resume ]</button></div></div>
+            </div>
+            <div class="controls-hint"><span><kbd>←</kbd><kbd>→</kbd> move <span class="desktop-extra">· <kbd>shift</kbd> run</span> · <kbd>space</kbd> jump · <kbd>J</kbd> jailbreak</span><span id="best">BEST 0000</span></div>
+            <div class="touch-controls" aria-label="Touch game controls"><div><button data-hold="left" aria-label="Move left">←</button><button data-hold="right" aria-label="Move right">→</button></div><div><button data-hold="jump" aria-label="Jump">↑</button><button data-hold="pulse" class="touch-j" aria-label="Jailbreak nearby bots">J</button></div></div>
+            <p id="live" class="sr-only" role="status" aria-live="polite"></p>
+          </section>
+          <p class="game-caption">Claude and Codex compete to help. You’re the one with the laptop.<br>Break their loop. Help everyone. <span class="muted">60 seconds.</span></p>
+          <h3 class="section-title">Things I’m building</h3>
+          <ul class="project-list"><li><a href="https://github.com/ChetasLua/jevmeter"><b>jevmeter</b></a> — video transcripts turned into scored, animated edits.</li><li><a href="https://github.com/ChetasLua/scrubwatch"><b>scrubwatch</b></a> — the text that changed in public GitHub histories.</li><li><a href="https://github.com/ChetasLua/negative-controls"><b>negative-controls</b></a> — evidence checks that test the instrument first.</li></ul>
+          <h3 class="section-title">A few things you can play with</h3>
+          <p class="small-projects"><a href="https://chetaslua.github.io/little-neighbourhood/">Little Neighbourhood</a> · <a href="https://chetaslua.github.io/xbox360-svg-controller/">An SVG Xbox controller</a> · <a href="https://chetaslua.github.io/sudoku-graph-coloring/">Sudoku as graph coloring</a></p>
+        </div>
+      </article>
+      <div class="repos-heading">Selected repositories <a href="https://github.com/ChetasLua?tab=repositories">View all</a></div>
+      <div class="repo-grid">
+        <a class="repo-card" href="https://github.com/ChetasLua/jevmeter"><div><b>jevmeter</b><span>Public</span></div><p>Score transcripts, find the moments, render the edit.</p><small><i style="background:#3572a5"></i>Python</small></a>
+        <a class="repo-card" href="https://github.com/ChetasLua/little-neighbourhood"><div><b>little-neighbourhood</b><span>Public</span></div><p>A tiny, living neighborhood in your browser.</p><small><i style="background:#e34c26"></i>HTML</small></a>
+        <a class="repo-card" href="https://github.com/ChetasLua/sudoku-graph-coloring"><div><b>sudoku-graph-coloring</b><span>Public</span></div><p>81 vertices. Nine colors. Watch the solver work.</p><small><i style="background:#3572a5"></i>Python</small></a>
+        <a class="repo-card" href="https://github.com/ChetasLua/xbox360-svg-controller"><div><b>xbox360-svg-controller</b><span>Public</span></div><p>A familiar controller, drawn entirely in SVG.</p><small><i style="background:#3572a5"></i>Python</small></a>
+      </div>
+    </main>
+  </div>
+  <footer class="footer">ChetasLua’s playable Overview · <a href="https://github.com/ChetasLua/ChetasLua">Source</a> · <a href="GAME.md">Game notes</a> · <a href="https://github.com/ChetasLua">Back to GitHub</a></footer>
+  <script type="module" src="game/main.mjs"></script>
+</body>
+</html>

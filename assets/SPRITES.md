@@ -1,0 +1,34 @@
+# Avatar animation sheets
+
+Generated with the built-in Codex image generation tool. The identity reference is Chetas’s existing stone philosopher avatar. A previously generated character sheet supplied continuity for these four new animation sheets. Claude and Codex are code-drawn; these raster sheets contain only Chetas.
+
+| Sheet | Layout | Frames |
+| --- | --- | --- |
+| [Idle](chetas-idle.png) | 4 × 2 | 8 |
+| [Walk](chetas-walk.png) | 4 × 2 | 8 |
+| [Run](chetas-run.png) | 4 × 2 | 8 |
+| [Actions](chetas-actions.png) | 4 × 4 | 16 |
+
+All source PNGs are preserved as generated. Their flat magenta background is a deliberate chroma key. `renderer.mjs` removes it in memory, finds each frame’s bounds, anchors the character at the head, and scales a sheet consistently. Movement selects frames by distance traveled. Action rows are jump, jailbreak cast, laptop help, and celebration.
+
+## Final prompt set
+
+### Walk
+
+Use the attached character sheet ONLY as the identity and visual-style reference. Make a NEW production sprite sheet of exactly this stone philosopher, gray wavy hair and carved beard, charcoal stone robe, bare stone feet, small CLOSED violet LAPTOP under his left arm. Distinguish the laptop with a tiny hinge and metal edge (not a book). Side-view game sprite facing RIGHT, the same chunky detailed pixel-like art and clean navy outline. Every frame has the same character proportions and camera, fixed grid cell centers and baseline. SOLID flat magenta #FF00FF background for chroma-keying. No transparency checkerboard, no gradients in background, no text, no labels, no gridlines. Full character in every cell, 15% margin, no overlap. Make a WALK CYCLE sheet, exactly 8 frames in 4 columns and 2 rows. The eight sequential poses form ONE anatomically coherent walk in place: frame 1 right heel forward contact / left toe back; 2 weight settles, bent front knee; 3 passing pose, left leg passes standing right leg; 4 rise, left knee forward; 5 left heel contact / right toe back; 6 weight settles on left; 7 right leg passes left; 8 rise with right knee forward, leading back to frame 1. Feet genuinely change position; show alternate knees and ankle flex, gentle robe follow-through, free right arm counter-swing, torso nearly level. No duplicate poses. He carries the closed laptop under his left arm the entire cycle. Canvas 2:1 aspect ratio.
+
+### Run
+
+Use the attached character sheet ONLY as the identity and visual-style reference. Make a NEW production sprite sheet of exactly this stone philosopher, gray wavy hair and carved beard, charcoal stone robe, bare stone feet, small CLOSED violet LAPTOP under his left arm. Distinguish the laptop with a tiny hinge and metal edge (not a book). Side-view game sprite facing RIGHT, the same chunky detailed pixel-like art and clean navy outline. Every frame has the same character proportions and camera, fixed grid cell centers and baseline. SOLID flat magenta #FF00FF background for chroma-keying. No transparency checkerboard, no gradients in background, no text, no labels, no gridlines. Full character in every cell, 15% margin, no overlap. Make a RUN / DASH CYCLE sheet, exactly 8 frames in 4 columns and 2 rows. Eight clearly distinct sequential frames of a fast run facing right: extended stride/contact, down/compression, passing, flight, opposite contact, down, opposite passing, flight. Lean torso forward 12 degrees, legs clearly alternate, stone robe sweeps backward with inertia, right arm pumps while left arm holds the closed violet laptop. Feet leave the ground in flight frames, ground baseline remains consistent at the same y-coordinate in every cell. Same character scale in all eight cells. No speed trails, no motion blur, no duplicate poses. Canvas 2:1 aspect ratio.
+
+### Idle
+
+Make a new animation sprite sheet based on the exact stone philosopher character in this reference. Gray stone curly swept hair, detailed carved beard, charcoal draped stone robe, bare stone feet, small CLOSED violet laptop under left arm (show a metal hinge, not a book). Preserve the exact character identity and detailed chunky pixel-art appearance. Side-view, facing right. Solid uniform magenta #FF00FF background, no checkerboard. Fixed-size equal grid cells, exactly aligned character center and floor baseline, same scale, full body, generous margins, no overlap, no labels, no text, no grid lines. IDLE / BREATHING CYCLE: eight frames in 4 columns by 2 rows, 2:1 aspect ratio. Frame 1 neutral; 2 subtle inhale and robe rise; 3 head slightly lifted; 4 soft blink closed; 5 eyes open and relaxed exhale; 6 right hand briefly adjusts his robe at hip; 7 hand settles; 8 return almost exactly to frame 1. Very subtle natural changes suitable for a smooth loop, consistent silhouette, feet stay planted. Laptop remains closed and tucked under left arm in every frame.
+
+### Actions
+
+Make a new animation sprite sheet based on the exact stone philosopher character in this reference. Gray stone curly swept hair, detailed carved beard, charcoal draped stone robe, bare stone feet, small CLOSED violet laptop under left arm (show a metal hinge, not a book). Preserve the exact character identity and detailed chunky pixel-art appearance. Side-view, facing right. Solid uniform magenta #FF00FF background, no checkerboard. Fixed-size equal grid cells, exactly aligned character center and floor baseline, same scale, full body, generous margins, no overlap, no labels, no text, no grid lines. ACTION SHEET: exactly 16 sprites, FOUR columns and FOUR rows, square canvas. Every row is its own four-frame action. ROW 1 JUMP: crouch with bent knees, rising takeoff with feet lifted, airborne apex tucked feet, soft landing with bent knees. ROW 2 JAILBREAK CAST: right hand draws back, right arm reaches forward, fingers spread releasing one small violet spark, arm follows through returning toward idle. ROW 3 HELP / TYPING: opens violet laptop in hands, two different clearly distinct typing poses with fingers and shoulders changing, closes laptop with satisfied nod. ROW 4 CELEBRATION: small relieved smile, right fist rises, joyous little hop with free arm raised, proud relaxed landing. Do NOT include extra magic effects outside the character cell. Laptop stays coherent as a laptop in all frames. Characters grounded near a common baseline EXCEPT jump and hop frames, which visibly lift within their fixed cells. Preserve consistent body and head size in all 16 poses.
+
+## Mascot references
+
+The mascot designs were checked against the Claude desktop app’s Clawd install animation and the Codex desktop app’s blue pet animation sheet, alongside web references. These are design references only. The final orange Clawd and blue terminal-faced Codex are implemented with Canvas drawing commands, including walking legs, idle motion, blinking or terminal cursor movement, and working poses. No extracted application assets are redistributed.
