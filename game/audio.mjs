@@ -20,7 +20,9 @@ export class Sound {
     o.onended = () => { o.disconnect(); v.disconnect(); p.disconnect(); };
   }
   cue(type, pan = 0) {
-    if (type === 'pulse') [220,330,440,660,880].forEach((f,i)=>this.note(f,.22,i*.047,'triangle',.22,pan));
+    if (type === 'assign') [440,660].forEach((f,i)=>this.note(f,.1,i*.06,'sine',.14));
+    else if (type === 'check') [880,1175].forEach((f,i)=>this.note(f,.08,i*.08,'sine',.1));
+    else if (type === 'pulse') [220,330,440,660,880].forEach((f,i)=>this.note(f,.22,i*.047,'triangle',.22,pan));
     else if (type === 'complete') [392,494,587,784].forEach((f,i)=>this.note(f,.27,i*.07,'sine',.28,pan));
     else if (type === 'token') { this.note(1175,.09,0,'sine',.22,pan); this.note(1568,.15,.055,'sine',.2,pan); }
     else if (type === 'lock') { this.note(174,.14,0,'triangle',.3,pan); this.note(130,.18,.12,'triangle',.22,pan); }
@@ -32,6 +34,6 @@ export class Sound {
   }
   update(g) {
     if (!this.enabled || g.mode !== 'playing') return;
-    if (Math.hypot(g.player.vx,g.player.vy)>20 && g.elapsed-this.lastStep>.27) { this.lastStep=g.elapsed; this.note(90+(Math.floor(g.player.walk)%2)*18,.045,0,'triangle',.15); }
+    if (Math.abs(g.player.vx)>20 && g.player.vy===0 && g.elapsed-this.lastStep>.27) { this.lastStep=g.elapsed; this.note(90+(Math.floor(g.player.walk)%2)*18,.045,0,'triangle',.15); }
   }
 }

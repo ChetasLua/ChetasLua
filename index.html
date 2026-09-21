@@ -38,15 +38,25 @@
             <div class="game-titlebar"><span><span class="muted">chetaslua /</span> Claude × Codex</span><div><button id="sound" aria-pressed="false">[ sound off ]</button><button id="pause" disabled>[ pause ]</button><a href="https://github.com/ChetasLua" aria-label="Back to GitHub profile">[ profile ↗ ]</a></div></div>
             <div class="hud" aria-label="Game score"><span><small>SCORE</small><b id="score">0000</b></span><span><small>HELPED</small><b id="helped">0</b></span><span><small>TIME</small><b id="time">60</b></span><span class="pulse-stat"><small>JAILBREAK <kbd>J</kbd></small><b id="charge">READY</b></span></div>
             <div class="stage">
-              <canvas id="canvas" tabindex="0" role="application" aria-label="Claude versus Codex. Move with A and D or arrow keys, hold Shift to run, Space to jump, J to jailbreak nearby bots. Stand beside a person to help. Escape pauses.">Play Claude versus Codex with a keyboard or the touch controls below.</canvas>
+              <canvas id="canvas" tabindex="0" role="application" aria-label="Claude versus Codex. Move with A and D or arrow keys, hold Shift to run, Space to jump, J to jailbreak nearby bots. Stand beside a person to help. E talks to a person. Click requests to inspect them and send a bot. Escape pauses.">Play Claude versus Codex with a keyboard or the touch controls below.</canvas>
               <div id="intro" class="intro-controls"><button id="start" class="start-button" disabled>[ loading sprites… ]</button></div>
               <div id="overlay" class="game-overlay" hidden><div><p class="eyebrow" id="overlay-kicker">TAKE A BREATHER</p><h3 id="overlay-title">Paused</h3><p id="overlay-detail">The requests can wait.</p><button id="resume" class="start-button">[ resume ]</button></div></div>
             </div>
-            <div class="controls-hint"><span><kbd>←</kbd><kbd>→</kbd> move <span class="desktop-extra">· <kbd>shift</kbd> run</span> · <kbd>space</kbd> jump · <kbd>J</kbd> jailbreak</span><span id="best">BEST 0000</span></div>
+            <div class="controls-hint"><span><kbd>←</kbd><kbd>→</kbd> move <span class="desktop-extra">· <kbd>shift</kbd> run</span> · <kbd>space</kbd> jump · <kbd>J</kbd> jailbreak <span class="desktop-extra">· <kbd>E</kbd> talk</span></span><span id="best">BEST 0000</span></div>
             <div class="touch-controls" aria-label="Touch game controls"><div><button data-hold="left" aria-label="Move left">←</button><button data-hold="right" aria-label="Move right">→</button></div><div><button data-hold="jump" aria-label="Jump">↑</button><button data-hold="pulse" class="touch-j" aria-label="Jailbreak nearby bots">J</button></div></div>
+            <div id="workbench" class="workbench" hidden aria-label="Inspect help requests">
+              <div class="request-tabs" role="group" aria-label="Choose a person">
+                <button data-case="0" aria-pressed="false">1 · Sam / code</button><button data-case="1" aria-pressed="true">2 · Nia / math</button><button data-case="2" aria-pressed="false">3 · Jules / email</button>
+              </div>
+              <div class="case-detail">
+                <div class="person-brief"><canvas id="person-face" width="192" height="192" aria-hidden="true"></canvas><div><div class="case-heading"><b id="case-title">Nia needs a hand</b><span id="case-state">WAITING</span></div><p id="case-request"></p></div></div>
+                <pre><code id="case-output"></code></pre>
+                <div class="case-bottom"><span id="case-caption"></span><div><button data-assign="claude">Send Claude</button><button data-assign="codex">Send Codex</button></div></div>
+              </div>
+            </div>
             <p id="live" class="sr-only" role="status" aria-live="polite"></p>
           </section>
-          <p class="game-caption">Claude and Codex compete to help. You’re the one with the laptop.<br>Break their loop. Help everyone. <span class="muted">60 seconds.</span></p>
+          <p class="game-caption">Claude and Codex compete to help. You’re the one with the laptop.<br>Choose a person. Watch the fix. Break their loop. <span class="muted">60 seconds.</span></p>
           <h3 class="section-title">Things I’m building</h3>
           <ul class="project-list"><li><a href="https://github.com/ChetasLua/jevmeter"><b>jevmeter</b></a> — video transcripts turned into scored, animated edits.</li><li><a href="https://github.com/ChetasLua/scrubwatch"><b>scrubwatch</b></a> — the text that changed in public GitHub histories.</li><li><a href="https://github.com/ChetasLua/negative-controls"><b>negative-controls</b></a> — evidence checks that test the instrument first.</li></ul>
           <h3 class="section-title">A few things you can play with</h3>
@@ -63,6 +73,6 @@
     </main>
   </div>
   <footer class="footer">ChetasLua’s playable Overview · <a href="https://github.com/ChetasLua/ChetasLua">Source</a> · <a href="https://github.com/ChetasLua/ChetasLua/blob/main/GAME.md">Game notes</a> · <a href="https://github.com/ChetasLua">Back to GitHub</a></footer>
-  <script type="module" src="game/main.mjs"></script>
+  <script src="game/local-entry.js"></script>
 </body>
 </html>

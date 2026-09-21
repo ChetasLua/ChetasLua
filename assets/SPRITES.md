@@ -32,3 +32,7 @@ Make a new animation sprite sheet based on the exact stone philosopher character
 ## Mascot references
 
 The mascot designs were checked against the Claude desktop app’s Clawd install animation and the Codex desktop app’s blue pet animation sheet, alongside web references. These are design references only. The final orange Clawd and blue terminal-faced Codex are implemented with Canvas drawing commands, including walking legs, idle motion, blinking or terminal cursor movement, and working poses. No extracted application assets are redistributed.
+
+## Human characters
+
+The people and selected-person portrait are code-native, adapted from Chetas’s `head-cases.html` project recovered from Claude Code history. `game/portraits.mjs` preserves its shaped 3D skull, projected facial features, layered hair, and tapered pen strokes. The game adds skin colors, tuned proportions, nine character designs, and expressions driven by requests and checked results. Bodies and gestures are drawn in `game/renderer.mjs`; no generated human sprite sheets are substituted for this drawing style.
